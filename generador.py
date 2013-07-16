@@ -29,28 +29,28 @@ VOCALES = ['a', 'ae', 'ai', 'ao', 'au',
     'y']
 
 
-def rand(consonantes, vocales):
-    'Combina una consonante y una vocal seleccionadas pseudoaleatoriamente'
-    return random.choice(consonantes) + random.choice(vocales)
-
-
-def palabra(longitud, consonantes, vocales):
+def genera_palabra(longitud, consonantes, vocales):
     'Genera una nueva palabra'
-    return ''.join(__genera(longitud, consonantes, vocales))
+    return ''.join(genera_silaba(longitud, consonantes, vocales))
 
 
-def __genera(longitud, consonantes, vocales):
+def genera_silaba(longitud, consonantes, vocales):
     'Genera una lista de sílabas'
     for _ in range(longitud):
-        yield rand(consonantes, vocales)
+        if random.random() > 0.5:
+            yield random.choice(consonantes) + random.choice(vocales)
+        else:
+            yield random.choice(vocales) + random.choice(consonantes)
 
 
-def main():
+def main(args):
     'Punto inicial del programa'
-    cuantas = int(raw_input('¿Cuántas palabras nuevas quieres generar? '))
-    for _ in range(cuantas):
-        print palabra(random.randrange(1, 6, 1), CONSONANTES, VOCALES)
+    for _ in range(args.N):
+        print genera_palabra(random.randrange(1, 5, 1), CONSONANTES, VOCALES)
 
 
 if __name__ == '__main__':
-    main()
+    __argparser__ = argparse.ArgumentParser(description='XML eater')
+    __argparser__.add_argument('N', type=int,
+        help=u'Cantidad de palabras que se desea generar')
+    main(__argparser__.parse_args())
